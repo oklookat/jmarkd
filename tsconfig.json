@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "Node",
+    "strict": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    //
+    "strictPropertyInitialization": false,
+    // "declaration": true,
+    // "declarationDir": "./types",
+    "outDir": "./dist/tmp",
+  },
+  "include": ["./src"],
+  "exclude": ["node_modules", "./src/testing.ts"]
+}
