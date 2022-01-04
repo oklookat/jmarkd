@@ -6,21 +6,29 @@ name: Node.js Package
 on:
   push:
     tags:
-      - 'v*'
-    branches:
-      - main
+      - "[0-9]\\.[0-9]\\.[0-9]"
 
 jobs:
+  getVersion:
+   if: github.event.base_ref == 'refs/heads/master'
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v2
+     - run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+     - run: echo $RELEASE_VERSION
+
   build:
+    needs: getVersion
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16
+      - run: npm ci
+      - run: npm version $RELEASE_VERSION
       - run: npm install
       - run: npm run build
-      - run: npm ci
       #- run: npm test
 
   publish-npm:
@@ -36,3 +44,16 @@ jobs:
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          
+          
+  release-github:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "dist/"
+        token: ${{ secrets.GITHUB_TOKEN }}
