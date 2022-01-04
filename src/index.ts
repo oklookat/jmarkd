@@ -1,12 +1,11 @@
 import "./assets/editor.scss";
 import { config } from "./types";
-import ToolbarLoader from "./core/loaders/toolbar";
-import EditorLoader from "./core/loaders/editor";
-import ContainerLoader from "./core/loaders/container";
+import ToolbarLoader from "./core/toolbar";
+import EditorLoader from "./core/editor";
+import ContainerLoader from "./core/container";
 
-
-/** editor */
-export default class Core {
+/** main class */
+export default class jmarkd {
 
     public config: config
     private editor: EditorLoader

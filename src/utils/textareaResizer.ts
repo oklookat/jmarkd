@@ -1,11 +1,11 @@
-import Logger from "./logger"
 import TextareaModify from "./textareaModify"
 
 /** resize textarea? ok. */
 export default class TextareaResizer {
 
-    private textarea: HTMLTextAreaElement
+    /** min textarea height */
     private minHeight = 204
+    private textarea: HTMLTextAreaElement
     private resizeTimeout: NodeJS.Timeout | undefined
     // events
     private _changeHeight = this.changeHeight.bind(this)
@@ -15,11 +15,6 @@ export default class TextareaResizer {
     private resetDisplay: () => void
 
     constructor(textarea: HTMLTextAreaElement) {
-        if (!(textarea instanceof HTMLTextAreaElement)) {
-            Logger.err(`textareaResizer: provide textarea element`)
-            throw Error()
-        }
-        //
         this.resetValue = TextareaModify.value(textarea)
         this.resetDisplay = TextareaModify.display(textarea)
         //
@@ -47,7 +42,7 @@ export default class TextareaResizer {
         }
         this.textarea[action]('input', this._changeHeight)
         this.textarea[action]('change', this._changeHeight)
-        // custom
+        // custom events
         this.textarea[action]('displaychange', this._changeHeight)
         this.textarea[action]('valuechange', this._changeHeight)
     }

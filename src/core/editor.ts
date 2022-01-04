@@ -1,6 +1,6 @@
-import { config } from "../../types"
-import DOM from "../dom"
-import TextareaResizer from "../../utils/textareaResizer"
+import { config } from "../types"
+import DOM from "./dom"
+import TextareaResizer from "../utils/textareaResizer"
 
 export default class EditorLoader {
 

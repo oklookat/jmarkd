@@ -1,9 +1,9 @@
-import { factoryToolbarConfig } from "../../factory";
-import { config, toolbarElement, toolbarElements } from "../../types";
-import DOM from "../dom";
-import Logger from "../../utils/logger";
-import Shortcutter from "../../utils/shortcutter";
-import { firstCharToUpper } from "../../utils";
+import { config, toolbarElement, toolbarElements } from "../types";
+import DOM from "./dom";
+import Logger from "../utils/logger";
+import Shortcutter from "../utils/shortcutter";
+import Utils from "../utils";
+import Factory from "../factory";
 
 /** loads toolbar */
 export default class ToolbarLoader {
@@ -12,14 +12,16 @@ export default class ToolbarLoader {
     public element: HTMLDivElement
     /** editor textarea */
     private textarea: HTMLTextAreaElement
-    /** global config */
+    /** editor config */
     private config: config
     /** creates shortcuts */
     private shortcutter: Shortcutter | undefined
-    /** toolbar names like ['header', 'link', 'image'] */
-    private names: string[] = factoryToolbarConfig.names!
-    /** elements a.k.a toolbar plugins */
-    private elements: toolbarElements = factoryToolbarConfig.elements!
+    /** default toolbar config */
+    private factory = Factory.toolbarConfig()
+    /** names like ['header', 'link', 'image'] */
+    private names: string[] = this.factory.names!
+    /** elements a.k.a plugins */
+    private elements: toolbarElements = this.factory.elements!
     /** elements config */
     private elementsConfig: { [name: string]: any } | undefined
 
@@ -32,9 +34,7 @@ export default class ToolbarLoader {
     }
 
     public destroy() {
-        if (this.shortcutter) {
-            this.shortcutter.destroy()
-        }
+        this.shortcutter?.destroy()
     }
 
     /** check config, set factory items */
@@ -46,7 +46,7 @@ export default class ToolbarLoader {
             this.names = this.config.toolbar.names
         }
         if (this.config.toolbar.elements) {
-            this.elements = Object.assign(this.config.toolbar.elements, factoryToolbarConfig.elements)
+            this.elements = Object.assign(this.config.toolbar.elements, this.factory.elements)
         }
         if (this.config.toolbar.elementsConfig) {
             this.elementsConfig = this.config.toolbar.elementsConfig
@@ -72,9 +72,11 @@ export default class ToolbarLoader {
     private loadElement(name: string, el: toolbarElement) {
         // add shortcut if exists
         if (el.getShortcut) {
+            // create shortcutter if not created
             if (!this.shortcutter) {
                 this.shortcutter = new Shortcutter()
             }
+            // add shortcut
             this.shortcutter.addAction({
                 shortcut: el.getShortcut(),
                 callback: () => {
@@ -89,7 +91,7 @@ export default class ToolbarLoader {
         }
         // create item
         const toolbarItem = DOM.createToolbarItem(el.icon)
-        toolbarItem.title = firstCharToUpper(name)
+        toolbarItem.title = Utils.firstCharToUpper(name)
         toolbarItem.onclick = () => {
             el.onClick(this.textarea)
         }

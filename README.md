@@ -1,29 +1,29 @@
 # jmarkd
-*work in progress*
-
-**textarea and toolbar = simple markdown editor**
+**simple markdown editor**
 
 ## Features
 1. Markdown
 2. Toolbar with API
-3. Textarea
-4. Preview
+3. Preview
 
-# Icons (licenses)
-#### modifications: resolution changed for all icons.
+## Getting started
+WIP
 
-### Heading, Italic
+## Icons (licenses)
+**modifications: resolution changed for all icons.**
+
+#### Heading, Italic
 https://github.com/oklookat
 (CC0 License)
 
-### Eye, Strikethrough, Link, Image, Anchor
+#### Eye, Strikethrough, Link, Image, Anchor
 https://www.svgrepo.com/
 (CC0 License)
 
-### Code
+#### Code
 https://uxwing.com/
 
-### Bold
+#### Bold
 https://github.com/primer/octicons
 
 ```
@@ -50,7 +50,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### Quote
+#### Quote
 https://github.com/twbs/icons
 
 ```

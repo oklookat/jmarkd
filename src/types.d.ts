@@ -1,12 +1,14 @@
-/** editor */
-export default class jmarkd {
+/** main class */
+export declare class jmarkd {
     public config: config
     constructor(config: config)
+    /** remove events etc */
     public destroy(): void
+    /** get text from textarea */
     public save(): string
 }
 
-/** element name */
+/** jmarkd uses this names for elements */
 export enum domName {
     container = 'jmarkd',
     toolbar = 'jmarkd__toolbar',
@@ -27,16 +29,15 @@ export type config = {
     input?: string
 }
 
+export type toolbarElements = Record<string, toolbarElement>
 export type toolbarConfig = {
     /** names of current active elements. Like: header, bold, link */
     names?: string[]
-    /** elements. Element name: Element */
+    /** elements. {name: element} */
     elements?: toolbarElements
-    /** elements config. Element name: Element config */
+    /** elements config. name: config */
     elementsConfig?: { [name: string]: any }
 }
-
-export type toolbarElements = Record<string, toolbarElement>
 
 export interface toolbarElement {
     /** item icon */

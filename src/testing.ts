@@ -1,13 +1,12 @@
-import './assets/style.scss'
-import Core from './'
+import './assets/testing.scss'
+import jmarkd from './'
 import { config } from './types'
 
 const container = document.getElementsByClassName("testing")[0] as HTMLDivElement
 
-const config: config = {
+const _config: config = {
     container: container
 }
 
-// @ts-ignore
-const core = new Core(config)
+new jmarkd(_config)
 

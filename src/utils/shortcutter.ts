@@ -1,5 +1,5 @@
 export type action = {
-    /** array of KeyboardEvent.code */
+    /** KeyboardEvent.code array */
     shortcut: string[]
     /** what to do when shortcut called */
     callback: () => void
@@ -8,11 +8,11 @@ export type action = {
 /** add keyboard shortcuts? ok. */
 export default class Shortcutter {
 
-    /** pretty pressed keys + callback. Like: ['KeyB+KeyF': callback] */
+    /** pretty pressed keys + callback. Example: ['KeyB+KeyF': callback] */
     private actions: { [shortcut: string]: () => void } = {}
-    /** pressed keys like: {KeyB: true, KeyF: true, KeyA: true} */
+    /** pressed keys. Example: {KeyB: true, KeyF: true, KeyA: true} */
     private keysPressed: { [key: string]: boolean } = {}
-    /** pressed keys like: KeyB+KeyF+KeyA */
+    /** pressed keys. Example: KeyB+KeyF+KeyA */
     private keysPressedPretty: string = ''
     // events
     private _keyDown = this.onKeyDown.bind(this)
@@ -25,6 +25,7 @@ export default class Shortcutter {
 
     public destroy() {
         this.manageEvents(false)
+        this.resetPressedKeys()
     }
 
     private manageEvents(add: boolean) {
@@ -76,7 +77,10 @@ export default class Shortcutter {
                 return
             }
         }
-        // reset pressed keys
+        this.resetPressedKeys()
+    }
+
+    private resetPressedKeys() {
         this.keysPressed = {}
         this.keysPressedPretty = ''
     }

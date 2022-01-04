@@ -3,28 +3,28 @@
   "author": "oklookat",
   "version": "1.0.0",
   "license": "MIT",
-  "description": "textarea and toolbar = simple markdown editor",
+  "description": "simple markdown editor",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oklookat/jmarkd.git"
+  },
   "files": [
     "dist"
   ],
   "types": "./dist/types.d.ts",
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
+  "browser": "./dist/index.es.js",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js"
+      "import": "./dist/index.es.js"
     },
-    "./dist/style.css": {
-      "import": "./dist/style.css",
-      "require": "./dist/style.css"
+    "./style": {
+      "import": "./dist/style.css"
     }
   },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && shx cp ./src/types.d.ts ./dist/types.d.ts",
-    "packlocal": "npm run build && npm pack",
-    "preview": "vite preview"
+    "packlocal": "npm run build && npm pack"
   },
   "devDependencies": {
     "@types/marked": "^4.0.1",

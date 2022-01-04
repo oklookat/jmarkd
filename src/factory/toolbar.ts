@@ -1,23 +1,24 @@
-import { domName, toolbarElement } from "../types";
+import { toolbarElement } from "../types";
+import DOM from "../core/dom";
+// markdown parser
 import { marked } from "marked";
 // code highlighting
 import hljs from "highlight.js";
-import '../assets/highlight.scss'
+import '../assets/highlight.scss';
 // icons
-import previewIcon from "../assets/icons/preview.svg"
-import headingIcon from "../assets/icons/heading.svg"
-import boldIcon from "../assets/icons/bold.svg"
-import italicIcon from "../assets/icons/italic.svg"
-import linkIcon from "../assets/icons/link.svg"
-import imageIcon from "../assets/icons/image.svg"
-import anchorIcon from "../assets/icons/anchor.svg"
-import blockquoteIcon from "../assets/icons/blockquote.svg"
-import strikethroughIcon from "../assets/icons/strikethrough.svg"
-import codeIcon from "../assets/icons/code.svg"
+import previewIcon from "../assets/icons/preview.svg";
+import headingIcon from "../assets/icons/heading.svg";
+import boldIcon from "../assets/icons/bold.svg";
+import italicIcon from "../assets/icons/italic.svg";
+import linkIcon from "../assets/icons/link.svg";
+import imageIcon from "../assets/icons/image.svg";
+import anchorIcon from "../assets/icons/anchor.svg";
+import blockquoteIcon from "../assets/icons/blockquote.svg";
+import strikethroughIcon from "../assets/icons/strikethrough.svg";
+import codeIcon from "../assets/icons/code.svg";
 import TextareaHelper from "../utils/textareaHelper";
 
 export class Preview implements toolbarElement {
-
     private active = false
     private textareaDisplay = ''
     private element: HTMLDivElement | undefined
@@ -42,20 +43,18 @@ export class Preview implements toolbarElement {
 
     private managePreview(create: boolean): HTMLDivElement | undefined {
         if (!create) {
-            if (this.element) {
-                this.element.remove()
-            }
+            this.element?.remove()
             this.textarea.style.display = this.textareaDisplay
             this.textarea.focus()
             window.scrollTo(0, 0)
             return
         }
+        // get display value and hide textarea
         this.textareaDisplay = this.textarea.style.display
         this.textarea.style.display = 'none'
-        const container = document.getElementsByClassName(domName.container)[0]
-        // create preview element
-        const element = document.createElement('div')
-        element.className = domName.preview
+        // get elements
+        const container = this.textarea.parentElement as HTMLDivElement
+        const previewContainer = DOM.createPreviewContainer()
         // parse
         this.setupParser()
         let _html = marked.parse(this.textarea.value)
@@ -63,10 +62,10 @@ export class Preview implements toolbarElement {
         if (this.config) {
             _html = this.config.sanitize(_html)
         }
-        // set
-        element.innerHTML = _html
-        container.insertBefore(element, this.textarea)
-        return element
+        // set preview html
+        previewContainer.innerHTML = _html
+        container.insertBefore(previewContainer, this.textarea)
+        return previewContainer
     }
 
     private setupParser() {
@@ -185,17 +184,11 @@ export class Link implements toolbarElement {
     }
 
     onClick(textarea: HTMLTextAreaElement): void {
-        let url = prompt('URL (with protocol) / Anchor:')
+        let url = prompt('URL / Anchor:')
         if (!url) { return }
-        url = encodeURI(url)
         const caption = TextareaHelper.getSelectedText(textarea) || prompt('Caption (optional):')
         if (caption === null) { return }
-        let mark: string
-        if (!caption) {
-            mark = `<${url}>`
-        } else {
-            mark = `[${caption}](${url})`
-        }
+        const mark = caption ? `[${caption}](${url})` : `<${url}>`
         TextareaHelper.insertAtCursor(textarea, mark)
     }
 }
@@ -208,16 +201,11 @@ export class Image implements toolbarElement {
     onClick(textarea: HTMLTextAreaElement): void {
         const url = prompt('URL:')
         if (!url) { return }
-        const alt = prompt('Alt text:', 'image')
+        const alt = prompt('Alt:', 'image')
         if (alt === null) { return }
         const caption = prompt('Caption (optional):')
         if (caption === null) { return }
-        let mark = ``
-        if (caption) {
-            mark = `![${alt}](${url} "${caption}")`
-        } else {
-            mark = `![${alt}](${url})`
-        }
+        const mark = caption ? `![${alt}](${url} "${caption}")` : `![${alt}](${url})`
         TextareaHelper.insertAtCursor(textarea, mark)
     }
 }
@@ -229,7 +217,7 @@ export class Anchor implements toolbarElement {
 
     onClick(textarea: HTMLTextAreaElement): void {
         const name = prompt('Name:')
-        if (name === null || name.length < 1) { return }
+        if (!name) { return }
         TextareaHelper.insertAtCursor(textarea, `<a name="${name}"></a>`)
         textarea.focus()
     }
@@ -251,18 +239,17 @@ export class Code implements toolbarElement {
     }
 
     onClick(textarea: HTMLTextAreaElement): void {
-        let lang = prompt("Language:", undefined)
+        const lang = prompt("Language:")
         if (lang === null) {
-            // cancel
             return
         }
         // construct
         const part = `\`\`\``
-        const newLine = `\n`
         let first = part
         if (lang) {
             first += lang
         }
+        const newLine = `\n`
         first += newLine
         const last = newLine + part
         // set
