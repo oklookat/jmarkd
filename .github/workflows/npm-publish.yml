@@ -18,6 +18,7 @@ jobs:
      - run: echo $RELEASE_VERSION
 
   build:
+    if: github.ref == 'refs/heads/main'
     needs: getVersion
     runs-on: ubuntu-latest
     steps:
@@ -32,9 +33,9 @@ jobs:
       #- run: npm test
 
   publish-npm:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -43,10 +44,11 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           
           
   release-github:
+    if: github.ref == 'refs/heads/main'
     needs: publish-npm
     runs-on: ubuntu-latest
     permissions:
