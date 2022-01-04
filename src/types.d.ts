@@ -19,7 +19,7 @@ export enum domName {
 
 /** main config */
 export type config = {
-    /** in this container be editor stuff */
+    /** jmarkd container */
     container: HTMLDivElement
     /** textarea placeholder */
     placeholder?: string
