@@ -30,8 +30,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && shx cp ./src/types.d.ts ./dist/types.d.ts",
-    "packlocal": "npm run build && npm pack",
-    "publish": "npm run build && npm publish --access public"
+    "packlocal": "npm run build && npm pack"
   },
   "devDependencies": {
     "@types/marked": "^4.0.1",
