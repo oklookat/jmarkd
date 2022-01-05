@@ -37,17 +37,21 @@ const editor = new jmarkd(config)
 **modifications: resolution changed for all icons.**
 
 **Heading, Italic**
+
 https://github.com/oklookat
 (CC0 License)
 
 **Eye, Strikethrough, Link, Image, Anchor**
+
 https://www.svgrepo.com/
 (CC0 License)
 
 **Code**
+
 https://uxwing.com/
 
 **Bold**
+
 https://github.com/primer/octicons
 
 ```
@@ -75,6 +79,7 @@ SOFTWARE.
 ```
 
 **Quote**
+
 https://github.com/twbs/icons
 
 ```
