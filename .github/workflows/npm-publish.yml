@@ -9,42 +9,34 @@ on:
       - "[0-9].[0-9].[0-9]"
 
 jobs:
-  build:
+  build-publish:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm install
-      - run: npm run build
-
-  publish-npm:
-    if: github.ref == 'refs/heads/main'
-    needs: build
-    runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          
-          
+      - id: build
+        run: npm ci && npm install && npm run build
+      - id: publish
+        run: npm publish --access public
+
+
   release-github:
-    if: github.ref == 'refs/heads/main'
-    needs: publish-npm
+    needs: build-publish
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
     - uses: ncipollo/release-action@v1
       with:
+        node-version: 16
         artifacts: "dist/"
         token: ${{ secrets.GITHUB_TOKEN }}
+    - run: npm install && npm run build

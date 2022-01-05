@@ -85,43 +85,8 @@ export class Preview implements toolbarElement {
             smartypants: false,
             xhtml: false,
         })
-        // marked.use({ extensions: [this.spoilerExtension()] })
     }
 
-    // // !>[title]content<! - spoiler. TODO: fix this, works not good. Idk how fix that.
-    // private spoilerExtension(): (marked.TokenizerExtension & marked.RendererExtension) {
-    //     return {
-    //         name: 'spoiler',
-    //         level: 'inline',
-    //         start(src: string) {
-    //             return src.match(/!>/gm)?.index || -1
-    //         },
-    //         tokenizer(src: string) {
-    //             const rule = /!>\[(.+)]([\s\S]+?)<!/gm
-    //             const match = rule.exec(src)
-    //             if (!match) {
-    //                 return
-    //             }
-    //             const raw = match[0]
-    //             const title = this.lexer.inlineTokens(match[1].trim(), [])
-    //             const content = this.lexer.inlineTokens(match[2].trim(), [])
-    //             const token = {
-    //                 type: 'spoiler',
-    //                 raw: raw,
-    //                 title: title,
-    //                 content: content,
-    //                 tokens: []
-    //             }
-    //             return token
-    //         },
-    //         renderer(token) {
-    //             const title = this.parser.parseInline(token.title, this.parser.renderer)
-    //             const content = this.parser.parseInline(token.content, this.parser.renderer)
-    //             return `<details><summary>${title}</summary>${content}</details>`
-    //         },
-    //         //childTokens: ['title', 'content']    
-    //     }
-    // }
 }
 
 export class Heading implements toolbarElement {
