@@ -23,19 +23,3 @@ jobs:
         run: npm ci && npm install && npm run build
       - id: publish
         run: npm publish --access public
-
-
-  release-github:
-    needs: build-publish
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-    - uses: ncipollo/release-action@v1
-      with:
-        node-version: 16
-        artifacts: "dist/"
-        token: ${{ secrets.GITHUB_TOKEN }}
-    - run: npm install && npm run build
