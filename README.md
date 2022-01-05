@@ -1,29 +1,53 @@
 # jmarkd
-**simple markdown editor**
+*simple markdown editor*
 
 ## Features
 1. Markdown
 2. Toolbar with API
 3. Preview
 
+## Requirements
+1. **Browser environment**
+2. **Modern browser**
+
 ## Getting started
-WIP
+1. install: ```npm install @oklookat/jmarkd```
+2. use:
+```html
+<div class="container"></div>
+```
+```javascript
+import jmarkd from '@oklookat/jmarkd'
+import '@oklookat/jmarkd/styles'
+
+const el = document.getElementsByClassName('container')[0]
+const config = {
+    container: el
+}
+const editor = new jmarkd(config)
+```
+
+## Config & methods
+**see src/types.d.ts file**
+
+## Factory toolbar items
+**see src/factory dir**
 
 ## Icons (licenses)
 **modifications: resolution changed for all icons.**
 
-#### Heading, Italic
+**Heading, Italic**
 https://github.com/oklookat
 (CC0 License)
 
-#### Eye, Strikethrough, Link, Image, Anchor
+**Eye, Strikethrough, Link, Image, Anchor**
 https://www.svgrepo.com/
 (CC0 License)
 
-#### Code
+**Code**
 https://uxwing.com/
 
-#### Bold
+**Bold**
 https://github.com/primer/octicons
 
 ```
@@ -50,7 +74,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-#### Quote
+**Quote**
 https://github.com/twbs/icons
 
 ```

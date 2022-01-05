@@ -40,7 +40,7 @@ export type toolbarConfig = {
 }
 
 export interface toolbarElement {
-    /** item icon */
+    /** item icon. SVG (prefer)/HTML/etc */
     get icon(): string
     /** set config to element */
     setConfig?: (config: any) => void
