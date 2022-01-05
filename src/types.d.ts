@@ -1,5 +1,5 @@
 /** main class */
-declare class jmarkd {
+export default class jmarkd {
     public config: config
     constructor(config: config)
     /** remove events etc */
@@ -7,7 +7,6 @@ declare class jmarkd {
     /** get text from textarea */
     public save(): string
 }
-export default jmarkd
 
 /** jmarkd uses this names for elements */
 export enum domName {
