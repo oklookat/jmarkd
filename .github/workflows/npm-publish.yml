@@ -22,4 +22,4 @@ jobs:
       - id: build
         run: npm ci && npm install && npm run build
       - id: publish
-        run: npm publish --access public
+        run: npm run publish

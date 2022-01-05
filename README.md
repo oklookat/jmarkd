@@ -11,7 +11,8 @@
 2. **Modern browser**
 
 ## Getting started
-1. install: ```npm install @oklookat/jmarkd```
+1. install: 
+```npm install @oklookat/jmarkd```
 2. use:
 ```html
 <div class="container"></div>
@@ -34,23 +35,23 @@ const editor = new jmarkd(config)
 **see src/factory dir**
 
 ## Icons (licenses)
-**modifications: resolution changed for all icons.**
+*modifications: resolution changed for all icons.*
 
-**Heading, Italic**
+**Heading, Italic:**
 
 https://github.com/oklookat
 (CC0 License)
 
-**Eye, Strikethrough, Link, Image, Anchor**
+**Eye, Strikethrough, Link, Image, Anchor:**
 
 https://www.svgrepo.com/
 (CC0 License)
 
-**Code**
+**Code:**
 
 https://uxwing.com/
 
-**Bold**
+**Bold:**
 
 https://github.com/primer/octicons
 
@@ -78,7 +79,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-**Quote**
+**Quote:**
 
 https://github.com/twbs/icons
 

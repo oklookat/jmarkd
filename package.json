@@ -4,6 +4,7 @@
   "version": "1.0.3",
   "license": "MIT",
   "description": "simple markdown editor",
+  "keywords": ["markdown editor", "editor", "text", "jmarkd"],
   "repository": {
     "type": "git",
     "url": "https://github.com/oklookat/jmarkd.git"
@@ -24,7 +25,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && shx cp ./src/types.d.ts ./dist/types.d.ts",
-    "packlocal": "npm run build && npm pack"
+    "packlocal": "npm run build && npm pack",
+    "publish": "npm run build && npm publish --access public"
   },
   "devDependencies": {
     "@types/marked": "^4.0.1",
