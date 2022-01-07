@@ -47,7 +47,7 @@ export default class TextareaResizer {
         this.textarea[action]('valuechange', this._changeHeight)
     }
 
-    private changeHeight() {
+    public changeHeight() {
         // set min height #1
         this.textarea.style.height = `${this.minHeight}px`
         // check heights

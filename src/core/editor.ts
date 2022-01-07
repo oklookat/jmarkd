@@ -6,7 +6,7 @@ export default class EditorLoader {
 
     public element: HTMLTextAreaElement
     private config: config
-    private resizer: TextareaResizer
+    public resizer: TextareaResizer
 
     constructor(config: config) {
         this.element = DOM.createTextarea()
