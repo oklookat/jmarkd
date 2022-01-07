@@ -17,6 +17,8 @@ export default class jmarkd {
         this.editor = new EditorLoader(this.config)
         this.toolbar = new ToolbarLoader(this.config, this.editor.element)
         this.container = new ContainerLoader(this.config.container, this.toolbar.element, this.editor.element)
+        // force check (change) height after appending element to container
+        this.editor.resizer.changeHeight()
     }
 
     public destroy() {
