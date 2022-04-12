@@ -21,7 +21,7 @@ import jmarkd from '@oklookat/jmarkd'
 import '@oklookat/jmarkd/styles'
 import { Config } from '@oklookat/jmarkd'
 
-const el = document.getElementsByClassName('container')[0]
+const container = document.getElementsByClassName('container')[0]
 
 const config: Config = {
     container: container,
@@ -69,6 +69,7 @@ class Say implements ToolbarElement {
     }
 }
 
+const container = document.getElementsByClassName('container')[0]
 const config: Config = {
     container: container,
     toolbar: {
