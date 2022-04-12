@@ -44,6 +44,7 @@ export default class TextareaModify {
             }
             Object.defineProperty(el, prop, defaultProtoDesc)
         }
+
         // set
         const _this = this
         Object.defineProperty(el, prop, {
@@ -89,6 +90,7 @@ export default class TextareaModify {
                 return true
             },
         })
+        
         // reset
         const resetter = () => {
             Object.defineProperty(el.style, prop, {

@@ -1,80 +1,108 @@
-$border-radius: 8px;
-$padding: 12px;
-$svg-size: 15px;
-$element-size: 35px;
+:root {
+    --jmarkd-radius-border: 8px;
+    --jmarkd-padding: 12px;
+    --jmarkd-size-svg: 15px;
+    --jmarkd-size-element: 35px;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --jmarkd-color-text: #000;
+        --jmarkd-color-background: #fff;
+        --jmarkd-color-border: rgb(226, 226, 226);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --jmarkd-color-text: #fff;
+        --jmarkd-color-background: rgb(20, 20, 20);
+        --jmarkd-color-border: rgb(50, 50, 50);
+    }
+}
 
 .jmarkd {
-    background-color: #fff;
-    color: #000;
-    border-radius: $border-radius;
-    //
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+
+    &,
     &__toolbar {
-        box-sizing: border-box; 
-        width: 100%;
         display: flex;
+        width: 100%;
+    }
+
+    &,
+    textarea,
+    &__toolbar__element {
+        color: var(--jmarkd-color-text);
+        background-color: var(--jmarkd-color-background);
+        fill: var(--jmarkd-color-text);
+    }
+
+    &,
+    &__toolbar__element,
+    &__preview img {
+        border-radius: var(--jmarkd-radius-border);
+    }
+
+    &__preview,
+    &__textarea {
+        font-size: 1.1rem;
+        font-family: inherit;
+        font-weight: inherit;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+        padding: 8px;
+        width: 100%;
+    }
+}
+
+.jmarkd {
+    box-sizing: border-box;
+    height: 100%;
+    flex-direction: column;
+    border: 1px solid var(--jmarkd-color-border);
+
+    &__toolbar {
         flex-wrap: wrap;
-        &__element{
-            padding: 4px;
-            border-radius: $border-radius;
-            color: black;
-            fill: black;
+        border-bottom: 1px solid var(--jmarkd-color-border);
+
+        &__element {
+            padding: 8px;
             //
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            height: $element-size;
-            width: $element-size;
+            height: var(--jmarkd-size-element);
+            width: var(--jmarkd-size-element);
             font-size: 0.8rem;
+
             svg {
-                height: $svg-size;
-                width: $svg-size;
+                height: var(--jmarkd-size-svg);
+                width: var(--jmarkd-size-svg);
             }
         }
     }
+
     &__textarea {
-        font-family: inherit;
-        font-size: 1.1rem;
-        font-weight: inherit;
-        box-sizing: border-box;
         outline: none;
         border: none;
         resize: none;
-        width: 100%;
-        border-bottom-left-radius: $border-radius;
-        border-bottom-right-radius: $border-radius;
-        padding-left: $padding;
-        padding-right: $padding;
+        // bottom-right | bottom-left
+        border-radius: 0 0 var(--jmarkd-radius-border) var(--jmarkd-radius-border);
     }
+
     // plugins
     &__preview {
-        font-size: 1.1rem;
-        box-sizing: border-box;
-        padding-left: $padding;
-        padding-right: $padding;
-        width: 100%;
-        white-space: pre-wrap;
-        overflow-wrap: break-word;
         * {
             max-width: 100%;
-            white-space: pre-wrap;
-            overflow-wrap: break-word;
         }
+
         img {
-            border-radius: $border-radius;
             width: auto;
             height: auto;
             object-fit: contain;
         }
-        h1, h2, h3, h4, h5, h6 {
-            margin-block-start: 0.17em;
-            margin-block-end: 0.04em;
-        }
+
         pre {
             overflow: auto;
         }

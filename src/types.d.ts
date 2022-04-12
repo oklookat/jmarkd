@@ -1,7 +1,7 @@
 /** main class */
 export default class jmarkd {
-    public config: config
-    constructor(config: config)
+    public config: Config
+    constructor(config: Config)
     /** remove events etc */
     public destroy(): void
     /** get text from textarea */
@@ -9,43 +9,55 @@ export default class jmarkd {
 }
 
 /** jmarkd uses this names for elements */
-export enum domName {
+export enum DomName {
     container = 'jmarkd',
     toolbar = 'jmarkd__toolbar',
-    toolbarElement = 'jmarkd__toolbar__element',
+    ToolbarElement = 'jmarkd__toolbar__element',
     textarea = 'jmarkd__textarea',
     preview = 'jmarkd__preview'
 }
 
 /** main config */
-export type config = {
+export type Config = {
     /** jmarkd container */
     container: HTMLDivElement
+
     /** textarea placeholder */
     placeholder?: string
+
     /** toolbar */
-    toolbar?: toolbarConfig
+    toolbar?: ToolbarConfig
+
     /** initial data */
     input?: string
 }
 
-export type toolbarElements = Record<string, toolbarElement>
-export type toolbarConfig = {
-    /** names of current active elements. Like: header, bold, link */
-    names?: string[]
-    /** elements. {name: element} */
-    elements?: toolbarElements
-    /** elements config. name: config */
-    elementsConfig?: { [name: string]: any }
+/** if you want to see default elements and configs see './src/factory' dir */
+export type ToolbarConfig = {
+
+    /** names of elements displayed in toolbar. Like: ['heading', 'bold', 'link'] */
+    displayed?: string[]
+
+    /** toolbar elements */
+    elements: {
+        /** load this elements. {'element name': element} */
+        boot?: Record<string, ToolbarElement>,
+
+        /** elements config. {'element name': element config} */
+        config?:  { [name: string]: any }
+    }
 }
 
-export interface toolbarElement {
+export interface ToolbarElement {
     /** item icon. SVG (prefer)/HTML/etc */
     get icon(): string
+
     /** set config to element */
     setConfig?: (config: any) => void
+
     /** get shortcut (KeyboardEvent.code). Returns array like ['ControlLeft', 'KeyA'] */
     getShortcut?: () => string[]
+
     /** when click on item */
     onClick(textarea: HTMLTextAreaElement): void
 }

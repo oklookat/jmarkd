@@ -1,4 +1,4 @@
-import { config, toolbarElement, toolbarElements } from "../types";
+import { Config, ToolbarConfig, ToolbarElement } from "../types";
 import DOM from "./dom";
 import Logger from "../utils/logger";
 import Shortcutter from "../utils/shortcutter";
@@ -8,24 +8,25 @@ import Factory from "../factory";
 /** loads toolbar */
 export default class ToolbarLoader {
 
-    /** toolbar element */
-    public element: HTMLDivElement
-    /** editor textarea */
-    private textarea: HTMLTextAreaElement
-    /** editor config */
-    private config: config
     /** creates shortcuts */
     private shortcutter: Shortcutter | undefined
-    /** default toolbar config */
-    private factory = Factory.toolbarConfig()
-    /** names like ['header', 'link', 'image'] */
-    private names: string[] = this.factory.names!
-    /** elements a.k.a plugins */
-    private elements: toolbarElements = this.factory.elements!
-    /** elements config */
-    private elementsConfig: { [name: string]: any } | undefined
 
-    constructor(config: config, textarea: HTMLTextAreaElement) {
+    /** toolbar element */
+    public element: HTMLDivElement
+
+    /** editor textarea */
+    private textarea: HTMLTextAreaElement
+
+    /** editor config */
+    private config: Config
+
+    /** toolbar config */
+    private toolbarConfig: ToolbarConfig
+
+    /** default toolbar config */
+    private toolbarFactory = Factory.toolbarConfig()
+
+    constructor(config: Config, textarea: HTMLTextAreaElement) {
         this.config = config
         this.textarea = textarea
         this.element = DOM.createToolbar()
@@ -40,42 +41,65 @@ export default class ToolbarLoader {
     /** check config, set factory items */
     private checkConfig() {
         if (!this.config.toolbar) {
+            this.toolbarConfig = this.toolbarFactory
             return
         }
-        if (this.config.toolbar.names) {
-            this.names = this.config.toolbar.names
+        this.toolbarConfig = this.config.toolbar
+
+        // check boot (elements)
+        if (this.toolbarConfig.elements.boot) {
+            if (this.toolbarFactory.elements.boot) {
+                this.toolbarConfig.elements.boot = Object.assign(this.toolbarFactory.elements.boot, this.toolbarConfig.elements.boot)
+            } else {
+                this.toolbarConfig.elements.boot = this.toolbarConfig.elements.boot
+            }
+
+        } else {
+            this.toolbarConfig.elements.boot = this.toolbarFactory.elements.boot
         }
-        if (this.config.toolbar.elements) {
-            this.elements = Object.assign(this.config.toolbar.elements, this.factory.elements)
+
+        // check config (elements)
+        if (this.toolbarConfig.elements.config) {
+            if (this.toolbarFactory.elements.config) {
+                this.toolbarConfig.elements.config = Object.assign(this.toolbarFactory.elements.config, this.toolbarConfig.elements.config)
+            } else {
+                this.toolbarConfig.elements.config = this.toolbarConfig.elements.config
+            }
+
+        } else {
+            this.toolbarConfig.elements.config = this.toolbarFactory.elements.config
         }
-        if (this.config.toolbar.elementsConfig) {
-            this.elementsConfig = this.config.toolbar.elementsConfig
+
+        // set displayed items
+        if(!this.toolbarConfig.displayed) {
+            this.toolbarConfig.displayed = []
+            for(const itemName in this.toolbarConfig.elements.boot!) {
+                this.toolbarConfig.displayed.push(itemName)
+            }
         }
     }
 
     /** load & append toolbar elements */
     private loadElements() {
-        if (!this.names) {
-            return
-        }
-        for (const name of this.names) {
-            // check if defined in names
-            const element = this.elements[name]
-            if (!element) {
-                Logger.warn(`toolbar element with name ${name} not found`)
+        for (const name of this.toolbarConfig.displayed!) {
+            if (!(name in this.toolbarConfig.elements.boot!)) {
+                Logger.warn(`toolbar element with name '${name}' not found. Check your config.`)
                 continue
             }
+            const element = this.toolbarConfig.elements.boot![name]
             this.loadElement(name, element)
         }
     }
 
-    private loadElement(name: string, el: toolbarElement) {
+    private loadElement(name: string, el: ToolbarElement) {
         // add shortcut if exists
         if (el.getShortcut) {
+
             // create shortcutter if not created
             if (!this.shortcutter) {
                 this.shortcutter = new Shortcutter()
             }
+
             // add shortcut
             this.shortcutter.addAction({
                 shortcut: el.getShortcut(),
@@ -84,11 +108,16 @@ export default class ToolbarLoader {
                 }
             })
         }
+
         // provide config if exists
-        if (this.elementsConfig && name in this.elementsConfig && el.setConfig) {
-            const config = this.elementsConfig[name]
+        const isElements = !!(this.toolbarConfig.elements &&
+            this.toolbarConfig.elements.config && name in this.toolbarConfig.elements.config && typeof el.setConfig === 'function')
+        if (isElements) {
+            const config = this.toolbarConfig.elements.config![name]
+            // @ts-ignore
             el.setConfig(config)
         }
+
         // create item
         const toolbarItem = DOM.createToolbarItem(el.icon)
         toolbarItem.title = Utils.firstCharToUpper(name)

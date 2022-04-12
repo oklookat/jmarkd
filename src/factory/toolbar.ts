@@ -1,10 +1,8 @@
-import { toolbarElement } from "../types";
+// utils
+import { ToolbarElement } from "../types";
 import DOM from "../core/dom";
-// markdown parser
-import { marked } from "marked";
-// code highlighting
-import hljs from "highlight.js";
-import '../assets/highlight.scss';
+import TextareaHelper from "../utils/textareaHelper";
+import Logger from "../utils/logger";
 // icons
 import previewIcon from "../assets/icons/preview.svg";
 import headingIcon from "../assets/icons/heading.svg";
@@ -16,15 +14,18 @@ import anchorIcon from "../assets/icons/anchor.svg";
 import blockquoteIcon from "../assets/icons/blockquote.svg";
 import strikethroughIcon from "../assets/icons/strikethrough.svg";
 import codeIcon from "../assets/icons/code.svg";
-import TextareaHelper from "../utils/textareaHelper";
 
-export class Preview implements toolbarElement {
+export class Preview implements ToolbarElement {
     private active = false
+
     private textareaDisplay = ''
+
     private element: HTMLDivElement | undefined
+
     private textarea: HTMLTextAreaElement
+
     private config: {
-        sanitize(html: string): string
+        parse: (data: string) => string
     }
 
     get icon(): string {
@@ -42,6 +43,12 @@ export class Preview implements toolbarElement {
     }
 
     private managePreview(create: boolean): HTMLDivElement | undefined {
+        if (!this.config || !this.config.parse || typeof this.config.parse !== 'function') {
+            this.active = false
+            Logger.err('parser not found. Pass parser to preview tool config.')
+            return
+        }
+
         if (!create) {
             this.element?.remove()
             this.textarea.style.display = this.textareaDisplay
@@ -49,47 +56,26 @@ export class Preview implements toolbarElement {
             window.scrollTo(0, 0)
             return
         }
+
         // get display value and hide textarea
         this.textareaDisplay = this.textarea.style.display
         this.textarea.style.display = 'none'
+
         // get elements
         const container = this.textarea.parentElement as HTMLDivElement
         const previewContainer = DOM.createPreviewContainer()
-        // parse
-        this.setupParser()
-        let _html = marked.parse(this.textarea.value)
-        // sanitize
-        if (this.config) {
-            _html = this.config.sanitize(_html)
-        }
+
+        const parsed = this.config.parse(this.textarea.value)
+
         // set preview html
-        previewContainer.innerHTML = _html
+        previewContainer.innerHTML = parsed
         container.insertBefore(previewContainer, this.textarea)
         return previewContainer
     }
 
-    private setupParser() {
-        marked.setOptions({
-            renderer: new marked.Renderer(),
-            highlight: function (code, lang) {
-                const language = hljs.getLanguage(lang) ? lang : 'plaintext'
-                return hljs.highlight(code, { language }).value
-            },
-            // highlight.js css expects a top-level 'hljs' class.
-            langPrefix: 'hljs language-',
-            pedantic: false,
-            gfm: true,
-            breaks: false,
-            sanitize: false,
-            smartLists: true,
-            smartypants: false,
-            xhtml: false,
-        })
-    }
-
 }
 
-export class Heading implements toolbarElement {
+export class Heading implements ToolbarElement {
     get icon(): string {
         return headingIcon
     }
@@ -113,7 +99,7 @@ export class Heading implements toolbarElement {
 
 }
 
-export class Bold implements toolbarElement {
+export class Bold implements ToolbarElement {
     get icon(): string {
         return boldIcon
     }
@@ -123,7 +109,7 @@ export class Bold implements toolbarElement {
     }
 }
 
-export class Italic implements toolbarElement {
+export class Italic implements ToolbarElement {
     get icon(): string {
         return italicIcon
     }
@@ -133,7 +119,7 @@ export class Italic implements toolbarElement {
     }
 }
 
-export class Strikethrough implements toolbarElement {
+export class Strikethrough implements ToolbarElement {
     get icon(): string {
         return strikethroughIcon
     }
@@ -143,7 +129,7 @@ export class Strikethrough implements toolbarElement {
     }
 }
 
-export class Link implements toolbarElement {
+export class Link implements ToolbarElement {
     get icon(): string {
         return linkIcon
     }
@@ -158,7 +144,7 @@ export class Link implements toolbarElement {
     }
 }
 
-export class Image implements toolbarElement {
+export class Image implements ToolbarElement {
     get icon(): string {
         return imageIcon
     }
@@ -175,7 +161,7 @@ export class Image implements toolbarElement {
     }
 }
 
-export class Anchor implements toolbarElement {
+export class Anchor implements ToolbarElement {
     get icon(): string {
         return anchorIcon
     }
@@ -188,7 +174,7 @@ export class Anchor implements toolbarElement {
     }
 }
 
-export class Blockquote implements toolbarElement {
+export class Blockquote implements ToolbarElement {
     get icon(): string {
         return blockquoteIcon
     }
@@ -198,7 +184,7 @@ export class Blockquote implements toolbarElement {
     }
 }
 
-export class Code implements toolbarElement {
+export class Code implements ToolbarElement {
     get icon(): string {
         return codeIcon
     }

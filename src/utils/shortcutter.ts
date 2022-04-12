@@ -10,10 +10,13 @@ export default class Shortcutter {
 
     /** pretty pressed keys + callback. Example: ['KeyB+KeyF': callback] */
     private actions: { [shortcut: string]: () => void } = {}
+
     /** pressed keys. Example: {KeyB: true, KeyF: true, KeyA: true} */
     private keysPressed: { [key: string]: boolean } = {}
+
     /** pressed keys. Example: KeyB+KeyF+KeyA */
     private keysPressedPretty: string = ''
+    
     // events
     private _keyDown = this.onKeyDown.bind(this)
     private _keyUp = this.onKeyUp.bind(this)

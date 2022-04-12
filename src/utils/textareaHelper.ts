@@ -13,12 +13,14 @@ export default class TextareaHelper {
     public static insertAtCursor(textarea: HTMLTextAreaElement, value: string) {
         const start = textarea.selectionStart
         const end = textarea.selectionEnd
+
         // set caret after text insertion
         const setNormalCaret = () => {
             const where = end + value.length
             textarea.selectionStart = where
             textarea.selectionEnd = where
         }
+
         // undo/redo support & another method to insert text
         const execMethod = (): boolean => {
             if (!document.execCommand) {
@@ -34,6 +36,7 @@ export default class TextareaHelper {
             setNormalCaret()
             return true
         }
+
         // good method, but undo/redo not work
         const constructMethod = () => {
             const before = textarea.value.slice(0, start)
@@ -53,6 +56,7 @@ export default class TextareaHelper {
         }
         const start = textarea.selectionStart
         const end = textarea.selectionEnd
+
         // set caret after text insertion
         const setNormalCaret = () => {
             let where = end
@@ -64,6 +68,7 @@ export default class TextareaHelper {
             textarea.selectionStart = where
             textarea.selectionEnd = where
         }
+
         // undo/redo support & another method to insert text
         const execMethod = (): boolean => {
             if (!document.execCommand) {
@@ -71,8 +76,10 @@ export default class TextareaHelper {
                 return false
             }
             textarea.focus()
+
             // fix caret after first inserted
             let lenOffset = 0
+
             // set first
             if (first) {
                 lenOffset = first.length
@@ -80,6 +87,7 @@ export default class TextareaHelper {
                 textarea.selectionEnd = start
                 document.execCommand("insertText", false, first)
             }
+
             // set last
             if (last) {
                 textarea.selectionStart = end + lenOffset
@@ -89,6 +97,7 @@ export default class TextareaHelper {
             setNormalCaret()
             return true
         }
+
         // good method, but undo/redo not work
         const constructMethod = () => {
             const before = textarea.value.slice(0, start)
@@ -108,6 +117,7 @@ export default class TextareaHelper {
             textarea.focus()
             setNormalCaret()
         }
+        
         execMethod() || constructMethod()
     }
 

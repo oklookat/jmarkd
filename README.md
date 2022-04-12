@@ -1,96 +1,92 @@
 # jmarkd
-*simple markdown editor*
+
+![screenshot](./screenshot/screen.png)
 
 ## Features
-1. Markdown
-2. Toolbar with API
-3. Preview
+- Toolbar with API
+- Dark/light themes
+- Preview (you need to provide markdown parser)
+- Hmm. What else is needed?
 
 ## Requirements
-1. **Browser environment**
-2. **Modern browser**
+- **Modern browser**
 
-## Getting started
-1. install: 
+## Example
 ```npm install @oklookat/jmarkd```
-2. use:
 ```html
 <div class="container"></div>
 ```
-```javascript
+```typescript
 import jmarkd from '@oklookat/jmarkd'
 import '@oklookat/jmarkd/styles'
+import { Config } from '@oklookat/jmarkd'
 
 const el = document.getElementsByClassName('container')[0]
-const config = {
-    container: el
+
+const config: Config = {
+    container: container,
+
+    // (optional) preview tool config to display parsed markdown
+    toolbar: {
+        elements: {
+            config: {
+                preview: {
+                    parse: (data) => {
+                        return anotherMarkdownParser.parse(data)
+                    }
+                }
+            }
+        }
+    }
 }
+
 const editor = new jmarkd(config)
 ```
 
-## Config & methods
-**see src/types.d.ts file**
+## Creating you own toolbar item
+```typescript
+import jmarkd from '@oklookat/jmarkd'
+import '@oklookat/jmarkd/styles'
+import { Config, ToolbarElement } from '@oklookat/jmarkd'
 
-## Factory toolbar items
-**see src/factory dir**
+class Say implements ToolbarElement {
+    private what: string
 
-## Icons (licenses)
-*modifications: resolution changed for all icons.*
+    get icon() {
+        return "Say"
+    }
 
-**Heading, Italic:**
+    setConfig(what: string) {
+        this.what = what
+    }
 
-https://github.com/oklookat
-(CC0 License)
+    getShortcut() {
+        return ['AltLeft', 'KeyE']
+    }
 
-**Eye, Strikethrough, Link, Image, Anchor:**
+    onClick(textarea: HTMLTextAreaElement) {
+        textarea.value += this.what
+    }
+}
 
-https://www.svgrepo.com/
-(CC0 License)
+const config: Config = {
+    container: container,
+    toolbar: {
+        // displayed: ['say'] // if you need leave only your items or change item order
+        elements: {
+            boot: {
+                say: new Say()
+            },
+            config: {
+                say: '🌹'
+            }
+        }
+    }
+}
 
-**Code:**
-
-https://uxwing.com/
-
-**Bold:**
-
-https://github.com/primer/octicons
-
-```
-MIT License
-
-Copyright (c) 2021 GitHub Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+const editor = new jmarkd(config)
 ```
 
-**Quote:**
-
-https://github.com/twbs/icons
-
-```
-The MIT License (MIT)
-
-Copyright (c) 2019-2021 The Bootstrap Authors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-```
+## Types, configs, toolbars, etc
+- **[./src/types.d.ts](./src/types.d.ts)**
+- **[./src/factory](./src/factory)**

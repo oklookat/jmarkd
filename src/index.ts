@@ -1,5 +1,5 @@
 import "./assets/editor.scss";
-import { config } from "./types";
+import { Config } from "./types";
 import ToolbarLoader from "./core/toolbar";
 import EditorLoader from "./core/editor";
 import ContainerLoader from "./core/container";
@@ -7,12 +7,12 @@ import ContainerLoader from "./core/container";
 /** main class */
 export default class jmarkd {
 
-    public config: config
+    public config: Config
     private editor: EditorLoader
     private toolbar: ToolbarLoader
     private container: ContainerLoader
 
-    constructor(config: config) {
+    constructor(config: Config) {
         this.config = config
         this.editor = new EditorLoader(this.config)
         this.toolbar = new ToolbarLoader(this.config, this.editor.element)
